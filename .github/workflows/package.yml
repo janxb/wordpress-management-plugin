@@ -1,5 +1,8 @@
 name: Package Repository
 
+permissions: 
+  contents: write
+
 on:
   push:
     branches:
@@ -22,12 +25,12 @@ jobs:
 
       - name: Create ZIP archive
         run: |
-          zip -r repository.zip ./src -x "*.git*"
+          zip -r brodda.IT.zip ./src -x "*.git*"
 
       - name: Commit and push ZIP
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add repository.zip
-          git commit -m "Add repository ZIP archive" || exit 0  # Verhindert Fehler, wenn nichts geändert wurde
+          git add brodda.IT.zip
+          git commit -m "new version deploy" || exit 0
           git push
