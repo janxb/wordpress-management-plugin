@@ -1,8 +1,31 @@
 <?php
 /*
  * Plugin Name: brodda.IT Wordpress Management
- * x Requires Plugins: aryo-activity-log, http-headers
 */
+
+include_once ABSPATH . 'wp-admin/includes/plugin.php';
+include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+class Silent_Upgrader_Skin extends WP_Upgrader_Skin
+{
+    public function feedback($string, ...$args)
+    {
+        // NOOP
+    }
+}
+
+function install_and_activate_plugin($plugin_path, $optional = false)
+{
+    $upgrader = new Plugin_Upgrader(new Silent_Upgrader_Skin());
+    $plugin_slug = explode('/', $plugin_path)[0];
+    $isInstalled = file_exists(WP_PLUGIN_DIR . "/{$plugin_path}");
+    if (!$isInstalled) {
+        $isInstalled = $upgrader->install("https://downloads.wordpress.org/plugin/{$plugin_slug}.latest-stable.zip");
+    }
+    if ($isInstalled && !is_plugin_active($plugin_path) && !$optional) {
+        activate_plugin("{$plugin_path}");
+    }
+}
 
 
 define('WP_POST_REVISIONS', 10);
@@ -33,10 +56,28 @@ function filename_randomizer__randomize_name($filename)
 add_filter('sanitize_file_name', 'filename_randomizer__randomize_name', 10);
 
 
-// remove settings page for log plugin from menu
 add_action('admin_init', function () {
-    remove_submenu_page('logdash_activity_log', 'logdash_settings');
+    install_and_activate_plugin('two-factor/two-factor.php');
+    install_and_activate_plugin('http-headers/http-headers.php');
+    install_and_activate_plugin('aryo-activity-log/aryo-activity-log.php');
+    install_and_activate_plugin('disable-comments/disable-comments.php', true);
+    install_and_activate_plugin('disable-blog/disable-blog.php', true);
+    install_and_activate_plugin('disable-search/disable-search.php', true);
+    install_and_activate_plugin('save-with-keyboard/save_with_keyboard.php');
+    install_and_activate_plugin('cache-enabler/cache-enabler.php');
+    install_and_activate_plugin('head-footer-code/head-footer-code.php');
+    install_and_activate_plugin('redirection/redirection.php');
+    deactivate_plugins("logdash-activity-log/logdash-activity-log.php");
 });
+
+
+// disable unwanted two factor providers
+add_filter(
+    'two_factor_providers',
+    function ( $providers ) {
+        return array_diff_key( $providers, array( 'Two_Factor_FIDO_U2F' => null ) );
+    }
+);
 
 
 // disable debug output for enfold theme
