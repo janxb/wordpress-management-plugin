@@ -58,16 +58,21 @@ add_filter('sanitize_file_name', 'filename_randomizer__randomize_name', 10);
 
 
 add_action('admin_init', function () {
-    install_and_activate_plugin('two-factor/two-factor.php');
-    install_and_activate_plugin('http-headers/http-headers.php');
-    install_and_activate_plugin('aryo-activity-log/aryo-activity-log.php');
     install_and_activate_plugin('disable-comments/disable-comments.php', true);
     install_and_activate_plugin('disable-blog/disable-blog.php', true);
     install_and_activate_plugin('disable-search/disable-search.php', true);
+    install_and_activate_plugin('two-factor/two-factor.php');
+    install_and_activate_plugin('http-headers/http-headers.php');
+    install_and_activate_plugin('aryo-activity-log/aryo-activity-log.php');
     install_and_activate_plugin('save-with-keyboard/save_with_keyboard.php');
     install_and_activate_plugin('cache-enabler/cache-enabler.php');
     install_and_activate_plugin('head-footer-code/head-footer-code.php');
     install_and_activate_plugin('redirection/redirection.php');
+    install_and_activate_plugin('simple-xml-sitemap-generator/index.php');
+    install_and_activate_plugin('user-switching/user-switching.php');
+    install_and_activate_plugin('user-role-editor/user-role-editor.php');
+    install_and_activate_plugin('admin-menu-editor/menu-editor.php');
+    
     deactivate_plugins("logdash-activity-log/logdash-activity-log.php");
 });
 
