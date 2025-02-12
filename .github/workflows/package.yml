@@ -25,7 +25,7 @@ jobs:
 
       - name: Increase Version
         run: |
-          jq '.version += 1' ./src/brodda-it/info.json | sponge ./src/brodda-it/info.json
+          jq '.version += 1' ./src/brodda-it/info.json | tee ./src/brodda-it/info.json >/dev/null
 
       - name: Create ZIP archive
         run: |
