@@ -75,8 +75,8 @@ add_action('admin_init', function () {
 // disable unwanted two factor providers
 add_filter(
     'two_factor_providers',
-    function ( $providers ) {
-        return array_diff_key( $providers, array( 'Two_Factor_FIDO_U2F' => null ) );
+    function ($providers) {
+        return array_diff_key($providers, array('Two_Factor_FIDO_U2F' => null));
     }
 );
 
@@ -245,7 +245,7 @@ function custom_backend_js()
 
 
 // custom plugin updates from Github repository
-add_filter('site_transient_update_plugins', 'broddait_check_update');
+add_filter('pre_set_site_transient_update_plugins', 'broddait_check_update');
 add_action('upgrader_process_complete', 'broddait_clear_cache', 10, 2);
 const BRODDAIT_PLUGIN_UPDATE_CACHE_KEY = 'broddait_plugin_update_cache';
 function broddait_check_update($transient)
@@ -281,14 +281,19 @@ function broddait_check_update($transient)
 
     $remote = json_decode(wp_remote_retrieve_body($remote));
 
-    if ($remote && version_compare($plugin->version, $remote->version, '<')) {
+    if ($remote) {
         $res = new stdClass();
         $res->slug = 'brodda-it';
+        $res->id = plugin_basename(__FILE__);
         $res->plugin = plugin_basename(__FILE__);
         $res->new_version = $remote->version;
         $res->package = $remote->download_url;
-        $transient->response[$res->plugin] = $res;
-        $transient->checked[$res->plugin] = $remote->version;
+
+        if (version_compare($plugin->version, $remote->version, '<')) {
+            $transient->response[$res->plugin] = $res;
+        } else {
+            $transient->no_update[$res->plugin] = $res;
+        }
     }
 
     return $transient;
