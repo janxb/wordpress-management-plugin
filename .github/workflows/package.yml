@@ -25,7 +25,10 @@ jobs:
 
       - name: Increase Version
         run: |
+          VERSION=$(jq '.version' ./src/brodda-it/info.json)
+          NEWVERSION=$((VERSION+1))
           jq '.version += 1' ./src/brodda-it/info.json > tmp.json && mv tmp.json ./src/brodda-it/info.json
+          sed -i -e "s/Version: $VERSION/Version: $NEWVERSION/g" src/brodda-it/brodda-it.php
 
       - name: Create ZIP archive
         run: |
