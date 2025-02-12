@@ -72,6 +72,7 @@ add_action('admin_init', function () {
     install_and_activate_plugin('user-switching/user-switching.php');
     install_and_activate_plugin('user-role-editor/user-role-editor.php');
     install_and_activate_plugin('admin-menu-editor/menu-editor.php');
+    install_and_activate_plugin('simple-custom-post-order/simple-custom-post-order.php');
     
     deactivate_plugins("logdash-activity-log/logdash-activity-log.php");
 });
