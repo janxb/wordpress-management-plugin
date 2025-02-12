@@ -218,7 +218,7 @@ function broddait_check_update($transient)
 
     if ($remote === false) {
         $remote = wp_remote_get(
-            'https://raw.githubusercontent.com/janxb/wordpress-management-plugin/refs/heads/main/src/brodda-it/info.json',
+            $plugin->info_url,
             array(
                 'timeout' => 10,
                 'headers' => array(
@@ -257,4 +257,5 @@ function broddait_clear_cache($upgrader, $options)
     if ('update' === $options['action'] && 'plugin' === $options['type']) {
         delete_transient(BRODDAIT_PLUGIN_UPDATE_CACHE_KEY);
     }
+
 }
