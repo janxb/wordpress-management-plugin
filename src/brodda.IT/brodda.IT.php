@@ -1,6 +1,6 @@
 <?php
 /*
- * Plugin Name: brodda.IT wordpress management
+ * Plugin Name: brodda.IT Wordpress Management
  * Requires Plugins: aryo-activity-log, http-headers
 */
 
