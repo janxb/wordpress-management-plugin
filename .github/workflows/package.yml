@@ -40,6 +40,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add brodda-it.zip ./src/brodda-it/info.json
+          git add --all
           git commit -m "new version" || exit 0
           git push
