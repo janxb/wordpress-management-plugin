@@ -1,0 +1,33 @@
+name: Package Repository
+
+on:
+  push:
+    branches:
+      - main  # Ändere den Branch, falls nötig
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Stop if commit was made by GitHub Actions
+        run: |
+          if git log -1 --pretty=format:'%an' | grep -q "github-actions\[bot\]"; then
+            echo "Commit was made by GitHub Actions. Stopping workflow."
+            exit 0
+          fi
+
+      - name: Create ZIP archive
+        run: |
+          zip -r repository.zip ./src -x "*.git*"
+
+      - name: Commit and push ZIP
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add repository.zip
+          git commit -m "Add repository ZIP archive" || exit 0  # Verhindert Fehler, wenn nichts geändert wurde
+          git push
