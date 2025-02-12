@@ -158,3 +158,49 @@ function custom_backend_js() {?>
   </script>
  <?
 }
+
+
+// custom plugin updates from Github repository
+add_filter('site_transient_update_plugins', 'misha_push_update');
+function misha_push_update($transient)
+{
+    if (empty($transient->checked)) {
+        return $transient;
+    }
+
+    $plugin = json_decode("info.json");
+
+    $remote = wp_remote_get(
+        'https://raw.githubusercontent.com/janxb/wordpress-management-plugin/refs/heads/main/src/brodda-it/info.json',
+        array(
+            'timeout' => 10,
+            'headers' => array(
+                'Accept' => 'application/json'
+            )
+        )
+    );
+
+    if (
+        is_wp_error($remote)
+        || 200 !== wp_remote_retrieve_response_code($remote)
+        || empty(wp_remote_retrieve_body($remote))
+        ) {
+        return $transient;
+    }
+
+    $remote = json_decode(wp_remote_retrieve_body($remote));
+
+    if ($remote && version_compare($plugin->version, $remote->version, '<')) {
+        $res = new stdClass();
+        $res->slug = 'brodda-it';
+        $res->plugin = plugin_basename(__FILE__);
+        $res->new_version = $remote->version;
+        $res->package = $remote->download_url;
+        $transient->response[$res->plugin] = $res;
+
+        //$transient->checked[$res->plugin] = $remote->version;
+    }
+
+    return $transient;
+
+}
