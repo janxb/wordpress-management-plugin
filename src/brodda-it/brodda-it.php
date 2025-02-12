@@ -168,7 +168,7 @@ function misha_push_update($transient)
         return $transient;
     }
 
-    $plugin = json_decode("info.json");
+    $plugin = (json_decode(file_get_contents(dirname(__FILE__) . "/info.json")));
 
     $remote = wp_remote_get(
         'https://raw.githubusercontent.com/janxb/wordpress-management-plugin/refs/heads/main/src/brodda-it/info.json',
@@ -202,5 +202,4 @@ function misha_push_update($transient)
     }
 
     return $transient;
-
 }
