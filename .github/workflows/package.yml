@@ -25,7 +25,9 @@ jobs:
 
       - name: Create ZIP archive
         run: |
-          cd ./src/brodda.IT && zip -r ../../brodda.IT.zip .
+          rm brodda.IT.zip
+          cd ./src
+          zip -r ../brodda.IT.zip ./brodda.IT
 
       - name: Commit and push ZIP
         run: |
