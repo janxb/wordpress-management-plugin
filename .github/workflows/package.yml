@@ -23,16 +23,20 @@ jobs:
             exit 0
           fi
 
+      - name: Increase Version
+        run: |
+          jq '.version += 1' ./src/brodda-it/version.json | sponge ./src/brodda-it/version.json
+
       - name: Create ZIP archive
         run: |
-          rm brodda.IT.zip
+          rm brodda-it.zip
           cd ./src
-          zip -r ../brodda.IT.zip ./brodda.IT
+          zip -r ../brodda-it.zip ./brodda-it
 
       - name: Commit and push ZIP
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add brodda.IT.zip
-          git commit -m "new version deploy" || exit 0
+          git add brodda-it.zip
+          git commit -m "new version" || exit 0
           git push
