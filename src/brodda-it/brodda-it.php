@@ -44,7 +44,7 @@ add_filter('wp_is_application_passwords_available', '__return_false');
 add_filter('pre_option_uploads_use_yearmonth_folders', '__return_zero');
 function filename_randomizer__randomize_name($filename)
 {
-    $filenameLength = 20;
+    $filenameLength = 40;
     if (preg_match('/^[a-f0-9]{' . $filenameLength . '}-.*/', $filename)) {
         $filename = substr($filename, $filenameLength + 1);
     }
@@ -73,7 +73,7 @@ add_action('admin_init', function () {
     install_and_activate_plugin('user-role-editor/user-role-editor.php');
     install_and_activate_plugin('admin-menu-editor/menu-editor.php');
     install_and_activate_plugin('simple-custom-post-order/simple-custom-post-order.php');
-    
+
     deactivate_plugins("logdash-activity-log/logdash-activity-log.php");
 });
 
@@ -111,14 +111,19 @@ add_action('after_setup_theme', function () {
     remove_image_size('entry_without_sidebar');
     add_image_size('custom-square-300', 300, 300, true);
     add_image_size('custom-banner-350', 350, 300, true);
+    add_image_size('custom-800', 800, 800);
 }, 999);
 add_filter('image_size_names_choose', 'my_custom_sizes');
 function my_custom_sizes($sizes)
 {
-    unset($sizes['featured_large']);
-    return array_merge($sizes, array(
-        'custom-square-300' => __('Quadratisch'),
-    ));
+    return array(
+        'thumbnail' => __('80px'),
+        'custom-square-300' => __('300px-q'),
+        'medium' => __('300px'),
+        'large' => __('500px'),
+        'custom-800' => __('800px'),
+        'full' => __('Original'),
+    );
 }
 
 add_filter('intermediate_image_sizes', function ($sizes) {
