@@ -40,6 +40,18 @@ delete_option('new_admin_email');
 add_filter('wp_is_application_passwords_available', '__return_false');
 
 
+// remove default media title during upload
+function remove_attachment_title($data, $postarr)
+{
+    if ($_POST['action'] == 'upload-attachment' && !empty($data['post_title']) && isset($postarr['post_type']) && $postarr['post_type'] === 'attachment') {
+        $data['post_title'] = '';
+    }
+    return $data;
+}
+
+add_filter('wp_insert_attachment_data', 'remove_attachment_title', 10, 2);
+
+
 // set upload filenames to random string and disable date-based upload folders
 add_filter('pre_option_uploads_use_yearmonth_folders', '__return_zero');
 function filename_randomizer__randomize_name($filename)
