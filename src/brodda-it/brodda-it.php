@@ -53,7 +53,15 @@ add_filter('wp_insert_attachment_data', 'remove_attachment_title', 10, 2);
 
 
 // set upload filenames to random string and disable date-based upload folders
-add_filter('pre_option_uploads_use_yearmonth_folders', '__return_zero');
+function force_disable_yearmonth_folders()
+{
+    if (get_option('uploads_use_yearmonth_folders') != 0) {
+        update_option('uploads_use_yearmonth_folders', 0);
+    }
+}
+
+add_action('admin_init', 'force_disable_yearmonth_folders');
+
 function filename_randomizer__randomize_name($filename)
 {
     $filenameLength = 40;
