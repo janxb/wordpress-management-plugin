@@ -64,14 +64,9 @@ add_action('admin_init', 'force_disable_yearmonth_folders');
 
 function filename_randomizer__randomize_name($filename)
 {
-    $filenameLength = 40;
-    if (preg_match('/^[a-f0-9]{' . $filenameLength . '}-.*/', $filename)) {
-        $filename = substr($filename, $filenameLength + 1);
-    }
-    $key = sha1(random_bytes(32));
-    $key = substr($key, 0, $filenameLength);
+    $name = sha1(random_bytes(32));
     $ext = pathinfo($filename, PATHINFO_EXTENSION);
-    return "$key.$ext";
+    return "$name.$ext";
 }
 
 add_filter('sanitize_file_name', 'filename_randomizer__randomize_name', 10);
