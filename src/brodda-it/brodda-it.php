@@ -133,7 +133,6 @@ function my_custom_sizes($sizes)
 {
     return array(
         'thumbnail' => __('80px'),
-        'custom-square-300' => __('300px-q'),
         'medium' => __('300px'),
         'large' => __('500px'),
         'custom-800' => __('800px'),
