@@ -262,7 +262,7 @@ EOL;
 				$this->install_and_activate_plugin( 'disable-comments/disable-comments.php' );
 				$this->install_and_activate_plugin( 'disable-blog/disable-blog.php' );
 			} else {
-				deactivate_plugins( "disable-comments/disable-comments.php" );
+				$this->install_and_activate_plugin( 'disable-comments/disable-comments.php', true );
 				deactivate_plugins( "disable-blog/disable-blog.php" );
 			}
 			$this->install_and_activate_plugin( 'disable-search/disable-search.php', true );
@@ -292,7 +292,7 @@ EOL;
 			update_option( 'siteurl', 'https://' . $_SERVER['HTTP_HOST'] );
 			update_option( 'home', 'https://' . $_SERVER['HTTP_HOST'] );
 		}
-		
+
 		update_option( 'admin_email', 'wordpress@brodda.it' );
 		delete_option( 'new_admin_email' );
 
