@@ -73,9 +73,18 @@ add_filter('sanitize_file_name', 'filename_randomizer__randomize_name', 10);
 
 
 add_action('admin_init', function () {
-    install_and_activate_plugin('disable-comments/disable-comments.php', true);
-    install_and_activate_plugin('disable-blog/disable-blog.php', true);
+
+    $blog_disabled = avia_get_option('disable_blog') == 'disable_blog';
+    if ($blog_disabled) {
+        install_and_activate_plugin('disable-comments/disable-comments.php');
+        install_and_activate_plugin('disable-blog/disable-blog.php');
+    } else {
+        deactivate_plugins("disable-comments/disable-comments.php");
+        deactivate_plugins("disable-blog/disable-blog.php");
+    }
+    
     install_and_activate_plugin('disable-search/disable-search.php', true);
+
     install_and_activate_plugin('two-factor/two-factor.php');
     install_and_activate_plugin('http-headers/http-headers.php');
     install_and_activate_plugin('aryo-activity-log/aryo-activity-log.php');
@@ -110,25 +119,43 @@ add_filter("avf_debugging_info", function ($debug) {
 
 
 // remove default media sizes and define custom ones
-add_action('after_setup_theme', function () {
+add_action('init', function () {
+    update_option('thumbnail_size_w', 80, true);
+    update_option('thumbnail_size_h', 80, true);
+    update_option('thumbnail_crop', true, true);
+    update_option('medium_size_w', 300, true);
+    update_option('medium_size_h', 300, true);
+    update_option('large_size_w', 500, true);
+    update_option('large_size_h', 500, true);
+
+    $blog_disabled = avia_get_option('disable_blog') == 'disable_blog';
+    if ($blog_disabled) {
+        remove_image_size('entry_with_sidebar');
+        remove_image_size('entry_without_sidebar');
+    }
+    remove_image_size('featured');
+    remove_image_size('featured_large');
+    remove_image_size('portfolio');
+    remove_image_size('portfolio_small');
     remove_image_size('1536x1536');
     remove_image_size('2048x2048');
     remove_image_size('widget');
     remove_image_size('square');
-    remove_image_size('featured');
-    remove_image_size('featured_large');
     remove_image_size('extra_large');
-    remove_image_size('portfolio');
-    remove_image_size('portfolio_small');
     remove_image_size('gallery');
     remove_image_size('magazine');
     remove_image_size('masonry');
-    remove_image_size('entry_with_sidebar');
-    remove_image_size('entry_without_sidebar');
+    remove_image_size('medium');
+    remove_image_size('large');
+    remove_image_size('thumbnail');
     add_image_size('custom-square-300', 300, 300, true);
     add_image_size('custom-banner-350', 350, 300, true);
+    add_image_size('custom-banner-600', 600, 170, true);
     add_image_size('custom-800', 800, 800);
-}, 999);
+    add_image_size('medium', 300, 300);
+    add_image_size('large', 500, 500);
+    add_image_size('thumbnail', 80, 80);
+});
 add_filter('image_size_names_choose', 'my_custom_sizes');
 function my_custom_sizes($sizes)
 {
@@ -338,5 +365,4 @@ function broddait_clear_cache($upgrader, $options)
     if ('update' === $options['action'] && 'plugin' === $options['type']) {
         delete_transient(BRODDAIT_PLUGIN_UPDATE_CACHE_KEY);
     }
-
 }
