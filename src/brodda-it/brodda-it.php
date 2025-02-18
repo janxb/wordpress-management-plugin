@@ -194,8 +194,9 @@ add_filter('editable_roles', function ($roles) {
 // custom backend CSS to diable some confusion input fields
 add_action('admin_head', 'custom_backend_css');
 function custom_backend_css()
-{ ?>
-	<style>
+{
+    echo <<<EOL
+    <style>
         .file-delete-preference-selector {
             display: none !important;
         }
@@ -240,14 +241,15 @@ function custom_backend_css()
             display: none;
         }
 	</style>
-    <?
+EOL;
 }
 
 
 // custom backend JS to change default features/settings
 add_action('admin_footer', 'custom_backend_js');
 function custom_backend_js()
-{ ?>
+{
+    echo <<<EOL
 	<script>
 		const currentPage = new URLSearchParams(window.location.search).get('page');
 		const currentUrl = window.location.pathname.split('/').pop();
@@ -272,7 +274,7 @@ function custom_backend_js()
 		// disable umami analytics tracking for logged in users
 		localStorage.setItem('umami.disabled', 1);
 	</script>
-    <?
+EOL;
 }
 
 
