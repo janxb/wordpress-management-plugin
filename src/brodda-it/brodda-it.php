@@ -26,6 +26,7 @@ class broddaIT {
 		if ( $this->is_enfold_theme_installed() ) {
 			$this->enfold_theme_specific_settings();
 			$this->remove_enfold_portfolio_feature();
+			$this->remove_enfold_google_maps_integration();
 		}
 	}
 
@@ -40,8 +41,14 @@ class broddaIT {
 		return $this->is_enfold_theme_installed() && avia_get_option( 'disable_blog' ) === 'disable_blog';
 	}
 
-	private function enfold_theme_specific_settings() {
+	private function enfold_theme_specific_settings(): void {
 		add_filter( "avf_debugging_info", '__return_empty_string' );
+	}
+
+	private function remove_enfold_google_maps_integration(): void {
+		add_action( 'admin_enqueue_scripts', function () {
+			wp_deregister_script( 'avia-google-maps-api' );
+		} );
 	}
 
 	private function increase_members_plugin_private_key_length(): void {
