@@ -281,10 +281,8 @@ EOL;
 		define( 'WP_POST_REVISIONS', 10 );
 		define( 'DISABLE_WP_CRON', true );
 
-		define( 'WP_HOME', 'https://' . $_SERVER['HTTP_HOST'] );
-		define( 'WP_SITEURL', 'https://' . $_SERVER['HTTP_HOST'] );
-		define( 'WP_CONTENT_URL', '/wp-content' );
-		define( 'DOMAIN_CURRENT_SITE', $_SERVER['HTTP_HOST'] );
+		update_option( 'siteurl', 'https://' . $_SERVER['HTTP_HOST'] );
+		update_option( 'home', 'https://' . $_SERVER['HTTP_HOST'] );
 
 		update_option( 'admin_email', 'wordpress@brodda.it' );
 		delete_option( 'new_admin_email' );
