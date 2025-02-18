@@ -24,8 +24,11 @@ function install_and_activate_plugin($plugin_path, $optional = false)
         $isInstalled = $upgrader->install("https://downloads.wordpress.org/plugin/{$plugin_slug}.latest-stable.zip");
     }
     if ($isInstalled && !is_plugin_active($plugin_path) && !$optional) {
-        activate_plugin("{$plugin_path}");
+        activate_plugin($plugin_path);
     }
+    $plugins = get_site_option('auto_update_plugins', []);
+    $plugins[] = $plugin_path;
+    update_site_option('auto_update_plugins', array_unique($plugins));
 }
 
 
@@ -85,6 +88,7 @@ add_action('admin_init', function () {
     
     install_and_activate_plugin('disable-search/disable-search.php', true);
 
+    install_and_activate_plugin('brodda-it/brodda-it.php');
     install_and_activate_plugin('two-factor/two-factor.php');
     install_and_activate_plugin('http-headers/http-headers.php');
     install_and_activate_plugin('aryo-activity-log/aryo-activity-log.php');
