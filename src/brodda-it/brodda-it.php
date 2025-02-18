@@ -19,10 +19,29 @@ class broddaIT {
 		$this->managed_image_sizes();
 		$this->remove_dashboard_widgets();
 		$this->increase_members_plugin_private_key_length();
-		$this->remove_enfold_portfolio_feature();
 		$this->remove_builtin_user_roles();
 		$this->custom_backend_styles();
 		$this->custom_backend_scripts();
+
+		if ( $this->is_enfold_theme_installed() ) {
+			$this->enfold_theme_specific_settings();
+			$this->remove_enfold_portfolio_feature();
+		}
+	}
+
+	private function is_enfold_theme_installed(): bool {
+		$theme       = wp_get_theme();
+		$enfold_name = 'Enfold';
+
+		return $theme->__get( 'name' ) === $enfold_name || $theme->parent()->__get( 'name' ) === $enfold_name;
+	}
+
+	private function is_blog_disabled(): bool {
+		return $this->is_enfold_theme_installed() && avia_get_option( 'disable_blog' ) === 'disable_blog';
+	}
+
+	private function enfold_theme_specific_settings() {
+		add_filter( "avf_debugging_info", '__return_empty_string' );
 	}
 
 	private function increase_members_plugin_private_key_length(): void {
@@ -189,8 +208,7 @@ EOL;
 			update_option( 'large_size_w', 500, true );
 			update_option( 'large_size_h', 500, true );
 
-			$blog_disabled = avia_get_option( 'disable_blog' ) == 'disable_blog';
-			if ( $blog_disabled ) {
+			if ( $this->is_blog_disabled() ) {
 				remove_image_size( 'entry_with_sidebar' );
 				remove_image_size( 'entry_without_sidebar' );
 			}
@@ -233,8 +251,7 @@ EOL;
 
 	private function managed_plugins(): void {
 		add_action( 'admin_init', function () {
-			$blog_disabled = avia_get_option( 'disable_blog' ) == 'disable_blog';
-			if ( $blog_disabled ) {
+			if ( $this->is_blog_disabled() ) {
 				$this->install_and_activate_plugin( 'disable-comments/disable-comments.php' );
 				$this->install_and_activate_plugin( 'disable-blog/disable-blog.php' );
 			} else {
@@ -273,8 +290,6 @@ EOL;
 		delete_option( 'new_admin_email' );
 
 		add_filter( 'wp_is_application_passwords_available', '__return_false' );
-
-		add_filter( "avf_debugging_info", '__return_empty_string' );
 	}
 
 	private string $updateCheckCacheKey = 'broddait_plugin_update_cache';
