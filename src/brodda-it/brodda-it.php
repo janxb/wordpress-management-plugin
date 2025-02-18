@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: brodda.IT Wordpress Management
- * Version: 24
+ * Version: 25
 */
 
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
