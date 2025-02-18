@@ -9,8 +9,6 @@ defined( 'ABSPATH' ) or die();
 include_once ABSPATH . 'wp-admin/includes/plugin.php';
 include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
-$broddaIT = new broddaIT();
-
 class broddaIT {
 	public function __construct() {
 		$this->misc_settings();
@@ -356,3 +354,5 @@ EOL;
 		update_site_option( 'auto_update_plugins', array_unique( $plugins ) );
 	}
 }
+
+new broddaIT();
