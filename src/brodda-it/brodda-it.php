@@ -14,6 +14,7 @@ class broddaIT {
 		$this->misc_settings();
 		$this->update_check();
 		$this->managed_plugins();
+		$this->managed_plugins_tag_names();
 		$this->random_upload_filenames();
 		$this->two_factor_plugin_settings();
 		$this->managed_image_sizes();
@@ -28,6 +29,16 @@ class broddaIT {
 			$this->remove_enfold_portfolio_feature();
 			$this->remove_enfold_google_maps_integration();
 		}
+	}
+
+	private function managed_plugins_tag_names(): void {
+		add_filter( "all_plugins", function ( $plugins ) {
+			foreach ( $this->managedPlugins as $plugin ) {
+				$plugins[ $plugin ]['Name'] = '[brodda.IT] ' . $plugins[ $plugin ]['Name'];
+			}
+
+			return $plugins;
+		} );
 	}
 
 	private function is_enfold_theme_installed(): bool {
@@ -361,6 +372,8 @@ EOL;
 			} );
 	}
 
+	private array $managedPlugins = [];
+
 	private function install_and_activate_plugin( $plugin_path, $optional = false ): void {
 		$upgrader    = new Plugin_Upgrader();
 		$plugin_slug = explode( '/', $plugin_path )[0];
@@ -374,6 +387,9 @@ EOL;
 		$plugins   = get_site_option( 'auto_update_plugins', [] );
 		$plugins[] = $plugin_path;
 		update_site_option( 'auto_update_plugins', array_unique( $plugins ) );
+		if ( ! str_contains( $plugin_slug, 'brodda-it' ) ) {
+			$this->managedPlugins[] = $plugin_path;
+		}
 	}
 }
 
