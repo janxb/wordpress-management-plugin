@@ -74,6 +74,7 @@ class broddaIT {
 			unset( $roles['subscriber'] );
 			unset( $roles['author'] );
 			unset( $roles['translator'] );
+			unset( $roles['editor'] );
 
 			return $roles;
 		} );
@@ -95,28 +96,34 @@ class broddaIT {
 		add_action( 'admin_footer', function () {
 			echo <<<EOL
 	<script>
-		const currentPage = new URLSearchParams(window.location.search).get('page');
-		const currentUrl = window.location.pathname.split('/').pop();
-
-		if (currentPage === 'participants-database-edit_participant') {
-			document.getElementById("pdb-private_id-field").children[0].setAttribute("disabled", "true");
-			document.getElementById("pdb-private_id-field").children[0].classList.add("readonly-field");
-			document.getElementById("pdb-last_update_user-field").children[0].setAttribute("disabled", "true");
-			document.getElementById("pdb-last_update_user-field").children[0].classList.add("readonly-field");
-			jQuery("input[type=submit][value='Nächster']").remove();
-			jQuery("input[type=submit][value='Zurück']").remove();
-			jQuery(".field-group-submit table tbody tr:nth-of-type(2)").remove();
-		}
-
-		jQuery('h3:contains("Zusätzliche Berechtigungen")').remove();
-
-		if (currentUrl === 'options-media.php'){
-			jQuery('form').remove();
-			jQuery('#wpbody .wrap').append(jQuery("<p></p>").text("Die Medien-Einstellungen dieser Seite werden durch brodda.IT verwaltet."));
-		}
-
-		// disable umami analytics tracking for logged in users
-		localStorage.setItem('umami.disabled', "1");
+		jQuery( document ).ready(function() {
+			const currentPage = new URLSearchParams(window.location.search).get('page');
+			const currentUrl = window.location.pathname.split('/').pop();
+	
+			if (currentPage === 'participants-database-edit_participant') {
+				document.getElementById("pdb-private_id-field").children[0].setAttribute("disabled", "true");
+				document.getElementById("pdb-private_id-field").children[0].classList.add("readonly-field");
+				document.getElementById("pdb-last_update_user-field").children[0].setAttribute("disabled", "true");
+				document.getElementById("pdb-last_update_user-field").children[0].classList.add("readonly-field");
+				jQuery("input[type=submit][value='Nächster']").remove();
+				jQuery("input[type=submit][value='Zurück']").remove();
+				jQuery(".field-group-submit table tbody tr:nth-of-type(2)").remove();
+			}
+			
+			if (currentPage === 'users-user-role-editor.php'){
+				ure_main.role_change(jQuery('#user_role').val());
+			}
+	
+			jQuery('h3:contains("Zusätzliche Berechtigungen")').remove();
+	
+			if (currentUrl === 'options-media.php'){
+				jQuery('form').remove();
+				jQuery('#wpbody .wrap').append(jQuery("<p></p>").text("Die Medien-Einstellungen dieser Seite werden durch brodda.IT verwaltet."));
+			}
+	
+			// disable umami analytics tracking for logged in users
+			localStorage.setItem('umami.disabled', "1");
+		});
 	</script>
 EOL;
 		} );
