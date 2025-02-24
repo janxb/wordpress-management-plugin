@@ -329,10 +329,6 @@ EOL;
 
 		add_filter( 'pre_set_site_transient_update_plugins',
 			function ( $transient ) {
-				if ( empty( $transient->checked ) ) {
-					return $transient;
-				}
-
 				$plugin = ( json_decode( file_get_contents( dirname( __FILE__ ) . "/info.json" ) ) );
 
 				$remote = get_transient( $this->updateCheckCacheKey );
