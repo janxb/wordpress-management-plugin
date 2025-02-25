@@ -303,8 +303,13 @@ EOL;
 	}
 
 	private function misc_settings(): void {
-		define( 'WP_POST_REVISIONS', 10 );
-		define( 'DISABLE_WP_CRON', true );
+		if ( ! defined( 'WP_POST_REVISIONS' ) ) {
+			define( 'WP_POST_REVISIONS', 10 );
+		}
+		
+		if ( ! defined( 'DISABLE_WP_CRON' ) ) {
+			define( 'DISABLE_WP_CRON', true );
+		}
 
 		if ( array_key_exists( 'HTTP_HOST', $_SERVER ) ) {
 			update_option( 'siteurl', 'https://' . $_SERVER['HTTP_HOST'] );
