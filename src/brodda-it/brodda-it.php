@@ -311,11 +311,6 @@ EOL;
 			define( 'DISABLE_WP_CRON', true );
 		}
 
-		if ( array_key_exists( 'HTTP_HOST', $_SERVER ) ) {
-			update_option( 'siteurl', 'https://' . $_SERVER['HTTP_HOST'] );
-			update_option( 'home', 'https://' . $_SERVER['HTTP_HOST'] );
-		}
-
 		update_option( 'admin_email', 'wordpress@brodda.it' );
 		delete_option( 'new_admin_email' );
 
