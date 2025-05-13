@@ -51,6 +51,9 @@ class broddaIT {
 					return 'on' == $value ? 'true' : 'false';
 				}
 			);
+			if ( ! get_option( 'broddait_portfolio_enabled' ) ) {
+				update_option( 'broddait_portfolio_enabled', 'false' );
+			}
 
 			add_settings_field(
 				'broddait_portfolio_enabled',
