@@ -11,6 +11,7 @@ include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
 
 class broddaIT {
 	public function __construct() {
+		$this->create_settings_page();
 		$this->misc_settings();
 		$this->update_check();
 		$this->managed_plugins();
@@ -26,9 +27,66 @@ class broddaIT {
 
 		if ( $this->is_enfold_theme_installed() ) {
 			$this->enfold_theme_specific_settings();
-			$this->remove_enfold_portfolio_feature();
+			if ( get_option( 'broddait_portfolio_enabled' ) == 'false' ) {
+				$this->remove_enfold_portfolio_feature();
+			}
 			$this->remove_enfold_google_maps_integration();
 		}
+	}
+
+	private function create_settings_page(): void {
+		add_action( 'admin_init', function () {
+			$page_slug    = 'broddait_settings';
+			$option_group = 'broddait_settings';
+
+			add_settings_section(
+				'broddait_settings',
+				'',
+				'',
+				$page_slug
+			);
+
+			register_setting( $option_group, 'broddait_portfolio_enabled',
+				function ( $value ) {
+					return 'on' == $value ? 'true' : 'false';
+				}
+			);
+
+			add_settings_field(
+				'broddait_portfolio_enabled',
+				'Enfold Portfolio aktiviert',
+				function ( $args ) { ?>
+					<label>
+						<input type="checkbox" name="broddait_portfolio_enabled" <?php checked( get_option( 'broddait_portfolio_enabled' ), 'true' ) ?> />
+					</label>
+				<?php },
+				$page_slug,
+				'broddait_settings' // section ID
+			);
+		} );
+
+		add_action( 'admin_menu', function () {
+			add_options_page(
+				'brodda.IT Einstellungen',
+				'brodda.IT',
+				'manage_options',
+				'broddait_settings',
+				function () {
+					?>
+					<div class="wrap">
+						<h1><?php echo get_admin_page_title() ?></h1>
+						<form method="post" action="options.php">
+							<?php
+							settings_fields( 'broddait_settings' );
+							do_settings_sections( 'broddait_settings' );
+							submit_button();
+							?>
+						</form>
+					</div>
+					<?php
+				},
+			);
+		} );
 	}
 
 	private function managed_plugins_tag_names(): void {
@@ -239,11 +297,13 @@ EOL;
 			}
 			remove_image_size( 'featured' );
 			remove_image_size( 'featured_large' );
-			remove_image_size( 'portfolio' );
-			remove_image_size( 'portfolio_small' );
+			if ( get_option( 'broddait_portfolio_enabled' ) == 'false' ) {
+				remove_image_size( 'portfolio' );
+				remove_image_size( 'portfolio_small' );
+				remove_image_size( 'widget' );
+			}
 			remove_image_size( '1536x1536' );
 			remove_image_size( '2048x2048' );
-			remove_image_size( 'widget' );
 			remove_image_size( 'square' );
 			remove_image_size( 'extra_large' );
 			remove_image_size( 'gallery' );
@@ -306,7 +366,7 @@ EOL;
 		if ( ! defined( 'WP_POST_REVISIONS' ) ) {
 			define( 'WP_POST_REVISIONS', 10 );
 		}
-		
+
 		if ( ! defined( 'DISABLE_WP_CRON' ) ) {
 			define( 'DISABLE_WP_CRON', true );
 		}
