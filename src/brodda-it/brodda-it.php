@@ -348,6 +348,7 @@ EOL;
 			}
 			$this->install_and_activate_plugin( 'disable-search/disable-search.php', true );
 			$this->install_and_activate_plugin( 'brodda-it/brodda-it.php' );
+			$this->install_and_activate_plugin( 'wp-duplicate-page/wp-duplicate-page.php' );
 			$this->install_and_activate_plugin( 'two-factor/two-factor.php' );
 			$this->install_and_activate_plugin( 'http-headers/http-headers.php' );
 			$this->install_and_activate_plugin( 'aryo-activity-log/aryo-activity-log.php' );
