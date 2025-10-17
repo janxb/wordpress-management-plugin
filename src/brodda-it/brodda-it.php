@@ -346,7 +346,8 @@ EOL;
 				$this->install_and_activate_plugin( 'disable-comments/disable-comments.php', true );
 				deactivate_plugins( "disable-blog/disable-blog.php" );
 			}
-			$this->install_and_activate_plugin( 'disable-search/disable-search.php', true );
+			$this->install_optional_plugin( 'disable-search/disable-search.php' );
+			$this->install_optional_plugin( 'simple-smtp/wp-simple-smtp.php' );
 			$this->install_and_activate_plugin( 'brodda-it/brodda-it.php' );
 			$this->install_and_activate_plugin( 'wp-duplicate-page/wp-duplicate-page.php' );
 			$this->install_and_activate_plugin( 'two-factor/two-factor.php' );
@@ -440,6 +441,10 @@ EOL;
 	}
 
 	private array $managedPlugins = [];
+
+	private function install_optional_plugin( $plugin_path ): void {
+		$this->install_and_activate_plugin( $plugin_path, true );
+	}
 
 	private function install_and_activate_plugin( $plugin_path, $optional = false ): void {
 		$upgrader    = new Plugin_Upgrader();
