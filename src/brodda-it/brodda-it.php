@@ -271,13 +271,15 @@ EOL;
 			return $data;
 		}, 10, 2 );
 
-
 		add_filter( 'sanitize_file_name', function ( $filename ) {
+			if (!isset($_REQUEST['action']) || $_REQUEST['action'] !== 'upload-attachment') {
+				return $filename;	
+			}
 			$name = sha1( random_bytes( 32 ) );
 			$ext  = pathinfo( $filename, PATHINFO_EXTENSION );
-
 			return "$name.$ext";
 		} );
+		
 		add_action( 'admin_init', function () {
 			if ( get_option( 'uploads_use_yearmonth_folders' ) != 0 ) {
 				update_option( 'uploads_use_yearmonth_folders', 0 );
