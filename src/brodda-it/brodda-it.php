@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: brodda.IT Wordpress Management
- * Version: 45
+ * Version: 46
 */
 
 defined( 'ABSPATH' ) or die();
