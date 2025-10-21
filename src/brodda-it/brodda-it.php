@@ -272,11 +272,9 @@ EOL;
 		}, 10, 2 );
 
 		add_filter( 'sanitize_file_name', function ( $filename ) {
-			if (!isset($_REQUEST['action']) || $_REQUEST['action'] !== 'upload-attachment') {
-				return $filename;	
-			}
 			$name = sha1( random_bytes( 32 ) );
 			$ext  = pathinfo( $filename, PATHINFO_EXTENSION );
+			if ($ext === 'zip') return $filename;
 			return "$name.$ext";
 		} );
 		
@@ -383,6 +381,8 @@ EOL;
 		delete_option( 'new_admin_email' );
 
 		add_filter( 'wp_is_application_passwords_available', '__return_false' );
+		
+		add_filter( 'avf_output_google_webfonts_script', '__return_false', 10, 1 );
 	}
 
 	private string $updateCheckCacheKey = 'broddait_plugin_update_cache';
