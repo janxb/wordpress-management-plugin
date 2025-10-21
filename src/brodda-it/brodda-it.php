@@ -103,10 +103,11 @@ class broddaIT {
 	}
 
 	private function is_enfold_theme_installed(): bool {
-		$theme       = wp_get_theme();
-		$enfold_name = 'Enfold';
-
-		return $theme->__get( 'name' ) === $enfold_name || $theme->parent()->__get( 'name' ) === $enfold_name;
+		$theme        = wp_get_theme();
+		$parent_theme = $theme->parent();
+		$enfold_name  = 'Enfold';
+		
+		return $theme->__get( 'name' ) === $enfold_name || $parent_theme && $parent_theme->__get( 'name' ) === $enfold_name;
 	}
 
 	private function is_blog_disabled(): bool {
