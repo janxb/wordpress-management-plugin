@@ -246,7 +246,10 @@ EOL;
 	private function remove_dashboard_widgets(): void {
 		add_action( 'admin_head', function () {
 			remove_meta_box( 'dashboard_primary', 'dashboard', 'side' );
+			remove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );
 			remove_meta_box( 'sb_dashboard_widget', 'dashboard', 'normal' );
+			remove_meta_box( 'dashboard_site_health', 'dashboard', 'normal' );
+			remove_meta_box( 'dashboard_rediscache', 'dashboard', 'normal' );
 			remove_action( 'welcome_panel', 'wp_welcome_panel' );
 			remove_meta_box( 'slugdiv', 'page', 'normal' );
 			remove_meta_box( 'authordiv', 'page', 'normal' );
@@ -349,13 +352,13 @@ EOL;
 			}
 			$this->install_optional_plugin( 'disable-search/disable-search.php' );
 			$this->install_optional_plugin( 'simple-smtp/wp-simple-smtp.php' );
+			$this->install_optional_plugin( 'cache-enabler/cache-enabler.php' );
 			$this->install_and_activate_plugin( 'brodda-it/brodda-it.php' );
 			$this->install_and_activate_plugin( 'wp-duplicate-page/wp-duplicate-page.php' );
 			$this->install_and_activate_plugin( 'two-factor/two-factor.php' );
 			$this->install_and_activate_plugin( 'http-headers/http-headers.php' );
 			$this->install_and_activate_plugin( 'aryo-activity-log/aryo-activity-log.php' );
 			$this->install_and_activate_plugin( 'save-with-keyboard/save_with_keyboard.php' );
-			$this->install_and_activate_plugin( 'cache-enabler/cache-enabler.php' );
 			$this->install_and_activate_plugin( 'head-footer-code/head-footer-code.php' );
 			$this->install_and_activate_plugin( 'redirection/redirection.php' );
 			$this->install_and_activate_plugin( 'simple-xml-sitemap-generator/index.php' );
