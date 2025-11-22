@@ -347,7 +347,7 @@ EOL;
 				$this->install_and_activate_plugin( 'disable-comments/disable-comments.php' );
 				$this->install_and_activate_plugin( 'disable-blog/disable-blog.php' );
 			} else {
-				$this->install_and_activate_plugin( 'disable-comments/disable-comments.php', true );
+				$this->install_optional_plugin( 'disable-comments/disable-comments.php' );
 				deactivate_plugins( "disable-blog/disable-blog.php" );
 			}
 			$this->install_optional_plugin( 'disable-search/disable-search.php' );
